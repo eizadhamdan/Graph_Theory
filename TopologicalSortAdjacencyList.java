@@ -1,5 +1,7 @@
 import java.util.*;
 
+/*Time Complexity: O(V + E)*/
+
 public class TopologicalSortAdjacencyList {
     // Helper Edge class to describe edges in the graph
     static class Edge {
