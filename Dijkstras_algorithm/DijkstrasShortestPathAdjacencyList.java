@@ -6,12 +6,8 @@ package Dijkstras_algorithm;
  * However, in this implementation since we're only going from a starting node to an ending node we can employ an optimization to stop early
  * once we've visited all the neighbors of the ending node.
  */
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
+// import java.util.CustomPriorityQueue;
 
 public class DijkstrasShortestPathAdjacencyList {
 
@@ -161,7 +157,7 @@ public class DijkstrasShortestPathAdjacencyList {
     public static void main(String[] args) {
         // Example usage of Dijkstra's algorithm
         // Create a graph with 5 nodes
-        DijkstrasAlgo dijkstra = new DijkstrasAlgo(5);
+        DijkstrasShortestPathAdjacencyList dijkstra = new DijkstrasShortestPathAdjacencyList(5);
 
         // Add edges (from, to, cost)
         dijkstra.addEdge(0, 1, 10);
