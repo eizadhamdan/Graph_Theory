@@ -1,21 +1,13 @@
 package Dijkstras_algorithm;
 
-/*
- * Implementation of Dijkstra's shortest path algorithm from a start node to a specific ending node.
- * Dijkstra's algorithm can also be modified to find the shortest path between a starting node and all other nodes in the graph.
- * However, in this implementation since we're only going from a starting node to an ending node we can employ an optimization to stop early
- * once we've visited all the neighbors of the ending node.
- */
 import java.util.*;
-// import java.util.CustomPriorityQueue;
 
-public class DijkstrasShortestPathAdjacencyList {
+public class DijkstrasAlgo {
 
-    // Small epsilon value to comparing double values.
+    // Small epsilon value to compare double values.
     private static final double EPS = 1e-6;
 
-    // An edge class to represent a directed edge
-    // between two nodes with a certain cost.
+    // An edge class to represent a directed edge between two nodes with a certain cost.
     public static class Edge {
         double cost;
         int from, to;
@@ -38,6 +30,69 @@ public class DijkstrasShortestPathAdjacencyList {
         }
     }
 
+    // Custom Priority Queue using a binary heap
+    public static class MyPriorityQueue {
+
+        private List<Node> heap;
+        private Comparator<Node> comparator;
+
+        public MyPriorityQueue(Comparator<Node> comparator) {
+            this.heap = new ArrayList<>();
+            this.comparator = comparator;
+        }
+
+        public void offer(Node node) {
+            heap.add(node);
+            heapifyUp(heap.size() - 1);
+        }
+
+        public Node poll() {
+            if (heap.isEmpty()) return null;
+            Node root = heap.get(0);
+            Node lastNode = heap.remove(heap.size() - 1);
+            if (!heap.isEmpty()) {
+                heap.set(0, lastNode);
+                heapifyDown(0);
+            }
+            return root;
+        }
+
+        public boolean isEmpty() {
+            return heap.isEmpty();
+        }
+
+        private void heapifyUp(int index) {
+            Node node = heap.get(index);
+            while (index > 0) {
+                int parentIndex = (index - 1) / 2;
+                Node parent = heap.get(parentIndex);
+                if (comparator.compare(node, parent) >= 0) break;
+                heap.set(index, parent);
+                index = parentIndex;
+            }
+            heap.set(index, node);
+        }
+
+        private void heapifyDown(int index) {
+            int size = heap.size();
+            Node node = heap.get(index);
+            while (index < size / 2) {
+                int leftChildIndex = 2 * index + 1;
+                int rightChildIndex = 2 * index + 2;
+                int smallestChildIndex = leftChildIndex;
+
+                if (rightChildIndex < size && comparator.compare(heap.get(rightChildIndex), heap.get(leftChildIndex)) < 0) {
+                    smallestChildIndex = rightChildIndex;
+                }
+
+                if (comparator.compare(heap.get(smallestChildIndex), node) >= 0) break;
+                heap.set(index, heap.get(smallestChildIndex));
+                index = smallestChildIndex;
+            }
+            heap.set(index, node);
+        }
+    }
+
     private int n;
     private double[] dist;
     private Integer[] prev;
@@ -52,44 +107,25 @@ public class DijkstrasShortestPathAdjacencyList {
                 }
             };
 
-    /*
-     * Initialize the solver by providing the graph size and a starting node. Use the {@link #addEdge} method to actually add edges to the graph.
-     *
-     * @param n - The number of nodes in the graph.
-     */
-    public DijkstrasShortestPathAdjacencyList(int n) {
+    public DijkstrasAlgo(int n) {
         this.n = n;
         createEmptyGraph();
     }
 
-    public DijkstrasShortestPathAdjacencyList(int n, Comparator<Node> comparator) {
+    public DijkstrasAlgo(int n, Comparator<Node> comparator) {
         this(n);
         if (comparator == null) throw new IllegalArgumentException("Comparator cannot be null");
         this.comparator = comparator;
     }
 
-    /*
-     * Adds a directed edge to the graph.
-     *
-     * @param from - The index of the node the directed edge starts at.
-     * @param to - The index of the node the directed edge end at.
-     * @param cost - The cost of the edge.
-     */
     public void addEdge(int from, int to, int cost) {
         graph.get(from).add(new Edge(from, to, cost));
     }
 
-    // Use {@link #addEdge} method to add edges to the graph and use this method to retrieve the constructed graph.
     public List<List<Edge>> getGraph() {
         return graph;
     }
 
-    /*
-     * Reconstructs the shortest path (of nodes) from 'start' to 'end' inclusive.
-     *
-     * @return An array of nodes indexes of the shortest path from 'start' to 'end'. If 'start' and
-     *     'end' are not connected then an empty array is returned.
-     */
     public List<Integer> reconstructPath(int start, int end) {
         if (end < 0 || end >= n) throw new IllegalArgumentException("Invalid node index");
         if (start < 0 || start >= n) throw new IllegalArgumentException("Invalid node index");
@@ -101,16 +137,14 @@ public class DijkstrasShortestPathAdjacencyList {
         return path;
     }
 
-    // Run Dijkstra's algorithm on a directed graph to find the shortest path from a starting node to an ending node.
-    // If there is no path between the starting node and the destination node the returned value is set to be Double.POSITIVE_INFINITY.
     public double dijkstra(int start, int end) {
         // Maintain an array of the minimum distance to each node
         dist = new double[n];
         Arrays.fill(dist, Double.POSITIVE_INFINITY);
         dist[start] = 0;
 
-        // Keep a priority queue of the next most promising node to visit.
-        PriorityQueue<Node> pq = new PriorityQueue<>(2 * n, comparator);
+        // Keep priority queue of the next most promising node to visit.
+        MyPriorityQueue pq = new MyPriorityQueue(comparator);
         pq.offer(new Node(start, 0));
 
         // Array used to track which nodes have already been visited.
@@ -139,8 +173,7 @@ public class DijkstrasShortestPathAdjacencyList {
                     pq.offer(new Node(edge.to, dist[edge.to]));
                 }
             }
-            // Once we've visited all the nodes spanning from the end
-            // node we know we can return the minimum distance value to
+            // Once we've visited all the nodes spanning from the end node we know we can return the minimum distance value to
             // the end node because it cannot get any better after this point.
             if (node.id == end) return dist[end];
         }
@@ -148,7 +181,6 @@ public class DijkstrasShortestPathAdjacencyList {
         return Double.POSITIVE_INFINITY;
     }
 
-    // Construct an empty graph with n nodes including the source and sink nodes.
     private void createEmptyGraph() {
         graph = new ArrayList<>(n);
         for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
@@ -156,7 +188,7 @@ public class DijkstrasShortestPathAdjacencyList {
     
     public static void main(String[] args) {
         // Example usage of Dijkstra's algorithm
-        DijkstrasShortestPathAdjacencyList dijkstra = new DijkstrasShortestPathAdjacencyList(5);
+        DijkstrasAlgo dijkstra = new DijkstrasAlgo(5);
 
         // Add edges (from, to, cost)
         dijkstra.addEdge(0, 1, 10);
@@ -180,3 +212,4 @@ public class DijkstrasShortestPathAdjacencyList {
         }
     }
 }
+

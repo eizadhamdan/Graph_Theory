@@ -360,4 +360,30 @@ public class DijkstrasShortestPathAdjacencyListWithDHeap {
                 throw new IllegalArgumentException("Key index out of bounds; received: " + ki);
         }
     }
+
+    public static void main(String[] args) {
+        // Example usage of Dijkstra's algorithm
+        DijkstrasShortestPathAdjacencyList dijkstra = new DijkstrasShortestPathAdjacencyList(5);
+
+        // Add edges (from, to, cost)
+        dijkstra.addEdge(0, 1, 10);
+        dijkstra.addEdge(0, 2, 3);
+        dijkstra.addEdge(1, 2, 1);
+        dijkstra.addEdge(1, 3, 2);
+        dijkstra.addEdge(2, 1, 4);
+        dijkstra.addEdge(2, 3, 8);
+        dijkstra.addEdge(2, 4, 2);
+        dijkstra.addEdge(3, 4, 7);
+        dijkstra.addEdge(4, 3, 9);
+
+        for (int i = 0; i < 5; i++) {
+            // Find the shortest path from node 0 to every other node
+            List<Integer> path = dijkstra.reconstructPath(0, i);
+            double distance = dijkstra.dijkstra(0, i);
+
+            System.out.print("Shortest path from node 0 to node " + i);
+            System.out.println(": " + path);
+            System.out.println("Distance: " + distance);
+        }
+    }
 }
