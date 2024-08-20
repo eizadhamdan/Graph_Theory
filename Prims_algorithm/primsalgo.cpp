@@ -10,7 +10,7 @@ struct Edge
 
     bool operator<(const Edge &other) const
     {
-        return cost > other.cost;
+        return cost < other.cost;
     }
 };
 
