@@ -201,51 +201,76 @@ void addUndirectedEdge(std::vector<std::vector<Edge>> &g, int from, int to, int 
 
 void example()
 {
-    int nodes = 10;
-    // std::cout << "Find the Minimum Spanning Tree of a graph using Prim's Algorithm." << std::endl;
+    // int nodes = 10;
+    std::cout << "Find the Minimum Spanning Tree of a graph using Prim's Algorithm." << std::endl;
     
-    // std::cout << "Enter the number of nodes in the graph: ";
-    // int nodes;
-    // std::cin >> nodes;
+    std::cout << "Enter the number of nodes in the graph: ";
+    int nodes;
+    std::cin >> nodes;
     
     auto g = createEmptyGraph(nodes);
+    
+    std::cout << "Enter 1 for directed graph. Enter 2 for undirected graph." << std::endl;
+    int directed;
+    std::cin >> directed;
 
-    // std::cout << "Enter the number of edges in the graph: ";
-    // int edges;
-    // std::cin >> edges;
+    std::cout << "Enter the number of edges in the graph: ";
+    int edges;
+    std::cin >> edges;
 
-    // for (int i = 0; i < edges; i++) {
-    //     std::cout << "Enter the 'from' node: ";
-    //     int from;
-    //     std::cin >> from;
-    //     std::cout << "Enter the 'to' node: ";
-    //     int to;
-    //     std::cin >> to;
-    //     std::cout << "Enter the edge weight: ";
-    //     int cost;
-    //     std::cin >> cost;
-        
-    //     addUndirectedEdge(g, from, to, cost);
-    // }
+    if (directed == 1) 
+    {
+        for (int i = 0; i < edges; i++) {
+            std::cout << "Enter the 'from' node: ";
+            int from;
+            std::cin >> from;
+            std::cout << "Enter the 'to' node: ";
+            int to;
+            std::cin >> to;
+            std::cout << "Enter the edge weight: ";
+            int cost;
+            std::cin >> cost;
+            
+            addDirectedEdge(g, from, to, cost);
+        }
+    }
+    else 
+    {
+        for (int i = 0; i < edges; i++) 
+        {
+            std::cout << "Enter the 'from' node: ";
+            int from;
+            std::cin >> from;
+            std::cout << "Enter the 'to' node: ";
+            int to;
+            std::cin >> to;
+            std::cout << "Enter the edge weight: ";
+            int cost;
+            std::cin >> cost;
+            
+            addUndirectedEdge(g, from, to, cost);
+        }
+    }
+    
 
-    addUndirectedEdge(g, 0, 1, 5);
-    addUndirectedEdge(g, 1, 2, 4);
-    addUndirectedEdge(g, 2, 9, 2);
-    addUndirectedEdge(g, 0, 4, 1);
-    addUndirectedEdge(g, 0, 3, 4);
-    addUndirectedEdge(g, 1, 3, 2);
-    addUndirectedEdge(g, 2, 7, 4);
-    addUndirectedEdge(g, 2, 8, 1);
-    addUndirectedEdge(g, 9, 8, 0);
-    addUndirectedEdge(g, 4, 5, 1);
-    addUndirectedEdge(g, 5, 6, 7);
-    addUndirectedEdge(g, 6, 8, 4);
-    addUndirectedEdge(g, 4, 3, 2);
-    addUndirectedEdge(g, 5, 3, 5);
-    addUndirectedEdge(g, 3, 6, 11);
-    addUndirectedEdge(g, 6, 7, 1);
-    addUndirectedEdge(g, 3, 7, 2);
-    addUndirectedEdge(g, 7, 8, 6);
+    // addUndirectedEdge(g, 0, 1, 5);
+    // addUndirectedEdge(g, 1, 2, 4);
+    // addUndirectedEdge(g, 2, 9, 2);
+    // addUndirectedEdge(g, 0, 4, 1);
+    // addUndirectedEdge(g, 0, 3, 4);
+    // addUndirectedEdge(g, 1, 3, 2);
+    // addUndirectedEdge(g, 2, 7, 4);
+    // addUndirectedEdge(g, 2, 8, 1);
+    // addUndirectedEdge(g, 9, 8, 0);
+    // addUndirectedEdge(g, 4, 5, 1);
+    // addUndirectedEdge(g, 5, 6, 7);
+    // addUndirectedEdge(g, 6, 8, 4);
+    // addUndirectedEdge(g, 4, 3, 2);
+    // addUndirectedEdge(g, 5, 3, 5);
+    // addUndirectedEdge(g, 3, 6, 11);
+    // addUndirectedEdge(g, 6, 7, 1);
+    // addUndirectedEdge(g, 3, 7, 2);
+    // addUndirectedEdge(g, 7, 8, 6);
 
     PrimsAlgo solver(g);
     long long cost = solver.getMstCost();
