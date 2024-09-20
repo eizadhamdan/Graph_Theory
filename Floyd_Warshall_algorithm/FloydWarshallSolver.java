@@ -161,15 +161,12 @@ public class FloydWarshallSolver {
                 String str;
                 if (path == null) {
                     str = "HAS AN ∞ NUMBER OF SOLUTIONS! (negative cycle case)";
-                } else if (path.size() == 0) {
+                }
+                else if (path.size() == 0) {
                     str = String.format("DOES NOT EXIST (node %d doesn't reach node %d)", i, j);
-                } else {
-                    str =
-                            String.join(
-                                    " -> ",
-                                    path.stream()
-                                            .map(Object::toString)
-                                            .collect(java.util.stream.Collectors.toList()));
+                }
+                else {
+                    str = String.join(" -> ", path.stream().map(Object::toString).collect(java.util.stream.Collectors.toList()));
                     str = "is: [" + str + "]";
                 }
 
